@@ -106,8 +106,7 @@ namespace CallOut.Models
             {
                 Politician newPolitician = (Politician)otherPolitician;
                 bool firstNameEquality = this.firstName.Equals(newPolitician.firstName);
-                bool lastNameEquality = this.lastName.Equals(newPolitician.lastName);
-                //bool idEquality = this.id.Equals(newPolitician.id);         
+                bool lastNameEquality = this.lastName.Equals(newPolitician.lastName);     
                 return (firstNameEquality && lastNameEquality);
             }
         }
