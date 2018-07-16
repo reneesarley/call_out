@@ -23,7 +23,7 @@ namespace CallOut.Models
             conn.Open();
 
             var cmd = conn.CreateCommand() as MySqlCommand;
-            cmd.CommandText = @"INSERT INTO offenses (politicianId, description) VALUES (@PoliticianId, @Description);";
+            cmd.CommandText = @"INSERT INTO offenses (politician_Id, description) VALUES (@PoliticianId, @Description);";
 
             MySqlParameter politicianIdParameter = new MySqlParameter();
             politicianIdParameter.ParameterName = "@PoliticianId";
