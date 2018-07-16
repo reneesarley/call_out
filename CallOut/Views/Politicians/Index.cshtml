@@ -4,4 +4,9 @@
 @{
 }
 <h1>Politicians</h1>
-<a href="/addNew">ADD POLITICIAN</a>
+<a href="/politicians/addNew">ADD NEW POLITICIAN</a>
+
+@foreach(var politician in Model)
+{
+    <p>@politician.firstName @politician.lastName</p><br>
+}
