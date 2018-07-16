@@ -18,11 +18,11 @@ namespace CallOut.Controllers
         }
 
         [HttpPost("/offenses/offense-form")]
-        public IActionResult Index(string description, int politician_select, int sexism, int racism, int misogyny, int homophobia)
+        public IActionResult Index(string description, int politicianselect, int sexism, int racism, int misogyny, int homophobia)
         {
             List<int> typeList = new List<int>() { sexism, racism, misogyny, homophobia };
             List<int> resultList = new List<int>() { };
-            Offense newOffense = new Offense(politician_select, description);
+            Offense newOffense = new Offense(politicianselect, description);
             foreach (int num in typeList)
             {
                 if (!(num == 0))
@@ -31,7 +31,15 @@ namespace CallOut.Controllers
                 }
             }
             newOffense.Save(resultList);
-            return View("Index");
+            return RedirectToAction("Index", "Home");
         }
+
+        [HttpPost("/offenses/offenseTracker")]
+        public IActionResult FilteredOffenses(int politicianSelect, int typeId)
+        {
+            List<object> model = new List<object>() { Politician.Find(politicianSelect), Offense.GetOffenses(politicianSelect, typeId) };
+            return View(model); 
+        }
+
     }
 }

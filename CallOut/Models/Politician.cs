@@ -11,10 +11,11 @@ namespace CallOut.Models
         public string lastName { get; set; }
 
 
-        public Politician( string firstNameInput, string lastNameInput, int id = 0)
+        public Politician( string firstNameInput, string lastNameInput, int idInput = 0)
         {
             firstName = firstNameInput;
             lastName = lastNameInput;
+            id = idInput;
         }
 
 
@@ -77,6 +78,41 @@ namespace CallOut.Models
 
             return allPoliticians;
 
+        }
+
+        public static Politician Find(int id)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"SELECT * FROM `politicians` WHERE id = @thisId;";
+
+             MySqlParameter thisId = new MySqlParameter();
+             thisId.ParameterName = "@thisId";
+             thisId.Value = id;
+             cmd.Parameters.Add(thisId);
+
+             var rdr = cmd.ExecuteReader() as MySqlDataReader;
+
+            string first_name="";
+            string last_name="";
+
+               while (rdr.Read())
+               {
+                   first_name = rdr.GetString(1);
+                   last_name = rdr.GetString(2);
+               }
+
+            Politician foundPolitician = new Politician(first_name, last_name);
+
+                conn.Close();
+                if (conn != null)
+                {
+                    conn.Dispose();
+                }
+
+                return foundPolitician;
         }
 
         public static void DeleteAll()

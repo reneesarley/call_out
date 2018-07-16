@@ -92,6 +92,53 @@ namespace CallOut.Models
 
         }
 
+        public static List<Offense> GetOffenses(int politicianId, int typeId)
+        {
+            List<Offense> allOffenses = new List<Offense> { };
+
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+
+            var cmd = conn.CreateCommand() as MySqlCommand;
+
+            //cmd.CommandText = @"SELECT * FROM offenses
+                //WHERE offenses.politician_id = @PoliticianId;";
+            cmd.CommandText = @"SELECT offenses.* FROM types
+                JOIN offenses_types ON (types.id = offenses_types.type_id)
+                JOIN offenses ON (offenses_types.offense_id = offenses.id)
+                WHERE offenses.politician_id = @PoliticianId AND offenses_types.type_id = @TypeId;";
+
+
+            MySqlParameter politicianIdParameter = new MySqlParameter();
+            politicianIdParameter.ParameterName = "@PoliticianId";
+            politicianIdParameter.Value = politicianId;
+            cmd.Parameters.Add(politicianIdParameter);
+
+            MySqlParameter typeIdParameter = new MySqlParameter();
+            typeIdParameter.ParameterName = "@TypeId";
+            typeIdParameter.Value = typeId;
+            cmd.Parameters.Add(typeIdParameter);
+
+            MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+            while (rdr.Read())
+            {
+                int idRdr = rdr.GetInt32(0);
+                int politicianIdRdr = rdr.GetInt32(1);
+                string descriptionRdr = rdr.GetString(2);
+                Offense newOffense = new Offense(politicianIdRdr, descriptionRdr, idRdr);
+                allOffenses.Add(newOffense);
+            }
+
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+
+            return allOffenses;
+
+        }
+
         public static void DeleteAll()
         {
             MySqlConnection conn = DB.Connection();
