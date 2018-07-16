@@ -15,4 +15,7 @@
   <ItemGroup>
     <Folder Include="Model.Tests\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CallOut\CallOut.csproj" />
+  </ItemGroup>
 </Project>
